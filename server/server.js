@@ -12,10 +12,28 @@ var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
+/*
+io.emit - sends to all connected users
+
+socket.emit - sends to current connected user 
+
+socket.broadcast.emit - sends to all connected users but the initiator
+*/
+
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    socket.emit('newMessage', {
+        from: "Admin",
+        text: "Welcome new user!",
+        createdAt: new Date().getTime()
+    });
 
+    socket.broadcast.emit('newMessage', {
+            from: "Admin",
+            text: "New user joined",
+            createdAt: new Date().getTime()
+    });
 
     socket.on('createMessage', (message) => {
         console.log('Create message', message);
