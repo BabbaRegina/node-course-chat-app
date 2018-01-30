@@ -35,6 +35,10 @@ io.on('connection', (socket) => {
         callback('this is from the server');
     });
 
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newMessage', generateMessage('Google', `${coords.latitude}, ${coords.longitude}`));
+    });
+
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });

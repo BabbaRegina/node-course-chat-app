@@ -1,9 +1,9 @@
 
 var socket = io();
 
-socket.on('connect', function ()  {
+socket.on('connect', function () {
     console.log('Connected to server');
-    
+
 });
 
 socket.on('disconnect', function () {
@@ -21,13 +21,32 @@ socket.on('newMessage', function (msg) {
 //     console.log('got it!', data);
 // });
 
-jQuery('#message-form').on('submit', function(e) {
+jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
 
     socket.emit('createMessage', {
         from: 'User',
         text: jQuery('[name=message]').val()
-    }, function() {
+    }, function () {
 
     });
 })
+
+// gestione bottone location
+var locationButton = jQuery('#send-location');
+locationButton.on('click', function () {
+    if (!navigator.geolocation) {
+        return alert('Geolocalizzazione non supportata dal browser');
+    }
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+        console.log(position);
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        });
+    }, function (err) {
+        alert('Unable to fetch location');
+    })
+
+});
