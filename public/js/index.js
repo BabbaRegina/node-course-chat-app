@@ -11,16 +11,17 @@ socket.on('disconnect', function () {
 })
 
 socket.on('newMessage', function (msg) {
-    console.log(`New message from ${msg.from} at ${msg.createdAt}: ${msg.text}`);
+    var formattedTime = moment(msg.createdAt).format('h:mm a');
     var li = jQuery('<li></li>');
-    li.text(`${msg.from}: ${msg.text}`);
+    li.text(`${formattedTime} ${msg.from} : ${msg.text}`);
     jQuery('#messages').append(li);
 })
 
 socket.on('newLocationMessage', function (message) {
+    var formattedTime = moment(message.createdAt).format('h:mm a');
     var li = jQuery('<li></li>');
     var a = jQuery('<a target="_blank">My current location</a>'); //_blank per aprire un nuovo tab
-    li.text(`${message.from}: `);
+    li.text(`${formattedTime} ${message.from} : `);
     a.attr('href', message.url);
     li.append(a);
     jQuery('#messages').append(li);
@@ -50,7 +51,7 @@ locationButton.on('click', function () {
     }
     //dopo averlo cliccato viene disabilitato
     locationButton.attr('disabled', 'disabled').text('Sending Location...');
-    
+
     navigator.geolocation.getCurrentPosition(function (position) {
         console.log(position);
         socket.emit('createLocationMessage', {
