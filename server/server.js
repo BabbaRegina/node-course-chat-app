@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
 
         socket.join(params.room);
 
+        //controllo se utente esiste già
+        if(users.getUserList(params.room).indexOf(params.name) > -1) {
+            return callback(`Utente ${params.name} già loggato nella chat ${params.room}`);
+        }
         users.removeUser(socket.id);
         users.addUser(socket.id, params.name, params.room);
 
