@@ -40,6 +40,10 @@ io.on('connection', (socket) => {
     // socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
     socket.on('join', (params, callback) => {
+        
+        if(isRealString(params.roomAttive) && !isRealString(params.room)) {
+            params.room = params.roomAttive;
+        }
         if (!isRealString(params.name) || !isRealString(params.room)) {
             return callback('input non validi');
         }
@@ -53,7 +57,7 @@ io.on('connection', (socket) => {
         users.removeUser(socket.id);
         users.addUser(socket.id, params.name, params.room);
 
-        io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+        io.to(params.room).emit('updateUserList', users.getUserList(params.room), params.room);
 
         socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'));
 

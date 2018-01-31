@@ -110,10 +110,18 @@ button:disabled {
     text-align: left
 }
 
+.chat__sidebar ol {
+    margin: 10px 20px;
+    text-align: left;
+    font-size: 1 rem;
+    color: #e6eaee
+}
+
 .chat__sidebar li {
     border: 1px solid #e1e1e1;
     border-radius: 5px;
-    margin: 10px
+    margin: 10px;
+    color: black
 }
 
 .chat__main {
